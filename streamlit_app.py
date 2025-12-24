@@ -15,15 +15,15 @@ st.set_page_config(
 )
 
 # ===============================
-# STYLE (BLUE + WHITE TEXT)
+# STYLE (BLUE SOFT + KONTRAS JELAS)
 # ===============================
 st.markdown("""
 <style>
 .stApp {
-    background-color: #dbeafe;
-    color: #0f172a;
+    background-color: #e0f2fe;
 }
 
+/* Global text */
 h1, h2, h3, h4, h5, h6, p, span, label {
     color: #0f172a !important;
 }
@@ -37,22 +37,21 @@ h1, h2, h3, h4, h5, h6, p, span, label {
     font-size: 16px;
 }
 
-
 /* Result Card */
 .result-card {
-    background-color: #1e40af;
+    background-color: #ffffff;
     padding: 20px;
     border-radius: 12px;
-    color: white;
+    border-left: 6px solid #2563eb;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
 /* Result Label */
 .result-label {
     font-size: 24px;
     font-weight: bold;
-    color: #000000;   /* HITAM */
+    color: #000000; /* HITAM */
 }
-
 </style>
 """, unsafe_allow_html=True)
 
@@ -106,7 +105,7 @@ if st.button("🔍 Prediksi"):
         # ===============================
         st.markdown('<div class="result-card">', unsafe_allow_html=True)
 
-        # Label utama (PUTIH)
+        # Label utama (HITAM)
         st.markdown(
             f'<div class="result-label">Hasil Prediksi: {label}</div>',
             unsafe_allow_html=True
@@ -115,9 +114,12 @@ if st.button("🔍 Prediksi"):
         st.markdown("<br><b>Confidence (%)</b>", unsafe_allow_html=True)
 
         # ===============================
-        # CONFIDENCE WITH PERCENT
+        # CONFIDENCE BAR (AMAN 0–1)
         # ===============================
         for lbl, score in confidence.items():
+            score = float(score)
+            score = max(0.0, min(score, 1.0))  # ⛑️ pengaman
+
             percent = round(score * 100, 2)
             st.write(f"**{lbl}** : {percent}%")
             st.progress(score)
