@@ -99,7 +99,7 @@ Setelah klik **Predict**, sistem menampilkan:
 ### Result View
 ![Result View](result_view.png)
 
-💻 **Live Demo:** [Streamlit App]([https://share.streamlit.io/amandarachma/hate-speech/main/streamlit_app.py](https://requirementstxt-8appf5qte4lxyw5efbymerm.streamlit.app/))
+💻 **Live Demo:** [Streamlit App](https://requirementstxt-8appf5qte4lxyw5efbymerm.streamlit.app/)
 
 
 
