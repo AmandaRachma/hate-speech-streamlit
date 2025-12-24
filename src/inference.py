@@ -32,8 +32,14 @@ def load_distilbert():
 
 
 def load_bert():
-    tokenizer = BertTokenizerFast.from_pretrained("models/bert")
-    model = BertForSequenceClassification.from_pretrained("models/bert")
+    model_name = "indobenchmark/indobert-base-p1"
+
+    tokenizer = BertTokenizerFast.from_pretrained(model_name)
+    model = BertForSequenceClassification.from_pretrained(
+        model_name,
+        num_labels=2
+    )
+
     model.eval()
     return tokenizer, model
 
