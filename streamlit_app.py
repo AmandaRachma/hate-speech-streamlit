@@ -5,20 +5,29 @@ from src.inference import (
     predict_bert
 )
 
+# ===============================
+# FUNSI UTILITY
+# ===============================
 def safe_progress(value):
+    """
+    Normalisasi nilai confidence agar aman dipakai di st.progress()
+    - Nilai >1 dianggap persen → dibagi 100
+    - NaN / inf → diubah menjadi 0
+    - Clamp antara 0.0 - 1.0
+    """
     try:
         value = float(value)
 
-        # kalau persen (misal 75 atau 100)
+        # jika sudah dalam persen (misal 75 atau 132)
         if value > 1:
             value = value / 100
 
-        # NaN / inf
+        # NaN atau inf → 0
         if value != value or value == float("inf"):
             return 0.0
 
+        # clamp
         return max(0.0, min(value, 1.0))
-
     except:
         return 0.0
 
@@ -32,43 +41,15 @@ st.set_page_config(
 )
 
 # ===============================
-# STYLE (BLUE SOFT + KONTRAS JELAS)
+# STYLE
 # ===============================
 st.markdown("""
 <style>
-.stApp {
-    background-color: #e0f2fe;
-}
-
-/* Global text */
-h1, h2, h3, h4, h5, h6, p, span, label {
-    color: #0f172a !important;
-}
-
-/* Button */
-.stButton > button {
-    background-color: #2563eb;
-    color: white;
-    border-radius: 8px;
-    height: 3em;
-    font-size: 16px;
-}
-
-/* Result Card */
-.result-card {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 12px;
-    border-left: 6px solid #2563eb;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-
-/* Result Label */
-.result-label {
-    font-size: 24px;
-    font-weight: bold;
-    color: #000000; /* HITAM */
-}
+.stApp { background-color: #e0f2fe; }
+h1, h2, h3, h4, h5, h6, p, span, label { color: #0f172a !important; }
+.stButton > button { background-color: #2563eb; color: white; border-radius: 8px; height: 3em; font-size: 16px; }
+.result-card { background-color: #ffffff; padding: 20px; border-radius: 12px; border-left: 6px solid #2563eb; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
+.result-label { font-size: 24px; font-weight: bold; color: #000000; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -84,7 +65,7 @@ st.write(
 st.divider()
 
 # ===============================
-# INPUT
+# INPUT TEKS DAN PILIH MODEL
 # ===============================
 text_input = st.text_area(
     "✍️ Masukkan teks:",
@@ -98,13 +79,16 @@ model_choice = st.selectbox(
 )
 
 # ===============================
-# PREDICT
+# BUTTON PREDIKSI
 # ===============================
 if st.button("🔍 Prediksi"):
     if text_input.strip() == "":
         st.warning("⚠️ Teks tidak boleh kosong.")
     else:
         with st.spinner("Sedang memproses prediksi..."):
+            # ===============================
+            # PILIH MODEL DAN PREDIKSI
+            # ===============================
             if model_choice == "LSTM":
                 result = predict_lstm(text_input)
             elif model_choice == "DistilBERT":
@@ -114,15 +98,15 @@ if st.button("🔍 Prediksi"):
 
         st.divider()
 
-        label = result["label"]
-        confidence = result["confidence"]
+        label = result.get("label", "Unknown")
+        confidence = result.get("confidence", {})
 
         # ===============================
         # RESULT CARD
         # ===============================
         st.markdown('<div class="result-card">', unsafe_allow_html=True)
 
-        # Label utama (HITAM)
+        # Label utama
         st.markdown(
             f'<div class="result-label">Hasil Prediksi: {label}</div>',
             unsafe_allow_html=True
@@ -133,14 +117,16 @@ if st.button("🔍 Prediksi"):
         # ===============================
         # CONFIDENCE BAR (AMAN 0–1)
         # ===============================
-        for lbl, score in confidence.items():
-            safe_value = safe_progress(score)
-            percent = round(safe_value * 100, 2)
-        
-            st.write(f"**{lbl}** : {percent}%")
-            st.progress(safe_value)
+        if isinstance(confidence, dict) and confidence:
+            for lbl, score in confidence.items():
+                safe_value = safe_progress(score)
+                percent = round(safe_value * 100, 2)
 
+                st.write(f"**{lbl}** : {percent}%")
+                st.progress(safe_value)
+        else:
+            st.write("Tidak ada confidence yang tersedia.")
+            st.progress(0.0)
 
         st.markdown('</div>', unsafe_allow_html=True)
-
         st.caption("Confidence menunjukkan probabilitas prediksi model.")
