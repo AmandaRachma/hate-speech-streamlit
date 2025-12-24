@@ -1,6 +1,7 @@
 streamlit
 torch
 transformers
-scikit-learn
+tensorflow-cpu
 numpy
-pandas
+scikit-learn
+joblib
