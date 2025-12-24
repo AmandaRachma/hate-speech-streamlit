@@ -5,6 +5,23 @@ from src.inference import (
     predict_bert
 )
 
+def safe_progress(value):
+    try:
+        value = float(value)
+
+        # kalau persen (misal 75 atau 100)
+        if value > 1:
+            value = value / 100
+
+        # NaN / inf
+        if value != value or value == float("inf"):
+            return 0.0
+
+        return max(0.0, min(value, 1.0))
+
+    except:
+        return 0.0
+
 # ===============================
 # PAGE CONFIG
 # ===============================
@@ -117,12 +134,12 @@ if st.button("🔍 Prediksi"):
         # CONFIDENCE BAR (AMAN 0–1)
         # ===============================
         for lbl, score in confidence.items():
-            score = float(score)
-            score = max(0.0, min(score, 1.0))  # ⛑️ pengaman
-
-            percent = round(score * 100, 2)
+            safe_value = safe_progress(score)
+            percent = round(safe_value * 100, 2)
+        
             st.write(f"**{lbl}** : {percent}%")
-            st.progress(score)
+            st.progress(safe_value)
+
 
         st.markdown('</div>', unsafe_allow_html=True)
 
