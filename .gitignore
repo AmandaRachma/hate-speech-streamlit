@@ -1,9 +1,8 @@
-venv/
-.env/
+# python
 __pycache__/
 *.pyc
-*.h5
-*.pt
-*.bin
-*.zip
-models/
+venv/
+
+# cache
+.cache/
+.ipynb_checkpoints/
