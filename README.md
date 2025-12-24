@@ -8,9 +8,9 @@ Proyek ini dikembangkan sebagai bagian dari **Ujian Akhir Praktikum (UAP) Pembel
 ## 🌟 Overview
 **Hate Speech Detection** adalah sistem klasifikasi teks untuk mendeteksi ujaran kebencian (*hate speech*) dan bahasa ofensif di media sosial. Sistem ini memanfaatkan beberapa pendekatan modern dalam *Deep Learning*:
 
-✔ **LSTM** (Long Short-Term Memory) sebagai baseline model  
-✔ **BERT** (Bidirectional Encoder Representations from Transformers) untuk pemahaman konteks dua arah  
-✔ **DistilBERT**, versi ringan BERT, lebih cepat dan efisien  
+✔ **LSTM** — Model neural network baseline tanpa pretrained embedding.  
+✔ **DistilBERT** — Transformer ringan hasil distilasi dari BERT.  
+✔ **BERT** — Transformer pretrained dua arah dengan performa terbaik.  
 
 Sistem juga dilengkapi dengan **user interface berbasis Streamlit**, sehingga pengguna dapat langsung memasukkan teks dan melihat prediksi secara interaktif.
 
@@ -21,13 +21,13 @@ Sistem juga dilengkapi dengan **user interface berbasis Streamlit**, sehingga pe
 Sumber: [Kaggle](https://www.kaggle.com/datasets/mrmorj/hate-speech-and-offensive-language-dataset)
 
 ### Karakteristik Dataset:
-- Jumlah data: >20.000 teks  
+- Jumlah data: >24.000 teks  
 - Bahasa: Inggris  
 - Jenis data: Teks media sosial  
-- Label:
-  - **Hate Speech**  
-  - **Offensive Language**  
-  - **Neither (Normal)**
+- Kelas label:
+  - **0: Hate Speech** (minoritas)
+  - **1: Offensive Language**
+  - **2: Normal**
 
 Setiap entri berisi kolom teks dan label kategorikal, siap digunakan untuk pelatihan dan pengujian model.
 
@@ -45,38 +45,36 @@ Analisis awal dilakukan untuk memahami distribusi data dan karakteristik teks:
 
 ---
 
-## 🧠 Preprocessing Data
-Tahapan persiapan data sebelum pelatihan model:
+## 🧠 Preprocessing & Tokenization
 
-1. **Lowercase** — Mengubah seluruh teks menjadi huruf kecil  
-2. **Cleaning** — Menghapus tanda baca atau karakter khusus yang tidak relevan  
-3. **Tokenisasi**  
-   - LSTM → Tokenizer Keras  
-   - BERT / DistilBERT → Tokenizer spesifik model transformer  
-4. **Padding** — Menyamakan panjang sequence untuk LSTM  
-5. **Encode Label** — Mengubah label kategorikal menjadi representasi numerik  
+Sebelum pelatihan model, data dipersiapkan melalui:
+
+1. **Cleaning**: lowercase, hapus URL, simbol, dan stopwords.
+2. **Tokenization**:
+   - LSTM: Tokenizer Keras + padding `max_len=50`.
+   - DistilBERT/BERT: Tokenizer spesifik model transformer + padding `max_length=128`.
+3. **Label Encoding**: label diubah menjadi numerik (`0,1,2`).
 
 ---
 
 ## 📊 Models Implemented
 
-| Model | Tipe | Deskripsi |
-|-------|------|-----------|
-| **LSTM** | Neural Network Base | Model berbasis LSTM untuk menangkap urutan kata dalam teks |
-| **BERT** | Pretrained Transformer | Memahami konteks teks dua arah secara kontekstual |
-| **DistilBERT** | Pretrained Transformer (Light) | Versi ringan BERT, lebih cepat, performa kompetitif |
+| Model       | Type                  | Description |
+|------------|----------------------|-------------|
+| **LSTM**    | Neural Network Base   | Baseline model, menggunakan embedding sederhana dan Bidirectional LSTM. |
+| **DistilBERT** | Pretrained Transformer | Ringan, cepat, menggunakan knowledge distillation dari BERT. |
+| **BERT**   | Pretrained Transformer | Transformer dua arah, memahami konteks kalimat secara lebih baik. |
 
 ---
 
 ## 📈 Evaluation Summary
 
-| Model | Accuracy | Analisis |
-|-------|----------|----------|
-| **LSTM** | 0.55 | Akurasi terendah karena embedding sederhana dan tokenisasi statis, kesulitan membedakan konteks ofensif |
-| **BERT** | 0.66 | Pretrained, memahami konteks dua arah, performa terbatas karena fine-tuning singkat dan CPU-only |
-| **DistilBERT** | 0.68 | Lebih ringan dan stabil, generalisasi lebih baik, cocok untuk deployment Streamlit |
+| Model       | Accuracy | Macro F1-score | Weighted F1-score | Insight |
+|------------|----------|----------------|------------------|---------|
+| **LSTM**   | 0.85     | 0.63           | 0.86             | Model baseline cukup baik. Kelas minoritas (Hate Speech) masih kesulitan terdeteksi karena distribusi data tidak seimbang. Menggunakan class weighting saat training. |
+| **DistilBERT** | 0.914  | 0.752          | —                | Model ringan, hasil evaluasi menunjukkan akurasi 91.4% dan macro F1 0.75. Lebih stabil dibanding LSTM dan cocok untuk deployment real-time. |
+| **BERT**   | 0.917    | 0.757          | —                | Transformer dua arah, performa terbaik: akurasi 91.7% dan macro F1 0.757. Memahami konteks teks lebih baik, namun memerlukan sumber daya komputasi lebih tinggi. |
 
-📌 **Kesimpulan**: Transformer-based models unggul dibanding LSTM, dan DistilBERT memberikan kombinasi efisiensi dan akurasi terbaik.
 
 ---
 
@@ -96,10 +94,10 @@ Setelah klik **Predict**, sistem menampilkan:
 
 ## 🖼 Feature Screenshot & Live Demo
 ### Input Form
-![Input Form](screenshots/input_form.png)
+![Input Form](input_form.png)
 
 ### Result View
-![Result View](screenshots/result_view.png)
+![Result View](result_view.png)
 
 💻 **Live Demo:** [Streamlit App]([https://share.streamlit.io/amandarachma/hate-speech/main/streamlit_app.py](https://requirementstxt-8appf5qte4lxyw5efbymerm.streamlit.app/))
 
