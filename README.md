@@ -91,6 +91,18 @@ Setelah klik **Predict**, sistem menampilkan:
 - Progress bar yang menunjukkan probabilitas tiap kelas  
 
 ---
+### 3. Confusion Matrix, Loss & Accuracy Curve
+
+**LSTM**
+![LSTM Loss & Accuracy](plots/lstm_loss_accuracy.png)
+
+**DistilBERT**
+![DistilBERT Loss & Accuracy](plots/distilbert_loss_accuracy.png)
+
+**BERT**
+![BERT Loss & Accuracy](plots/bert_loss_accuracy.png)
+
+---
 
 ## 🖼 Feature Screenshot & Live Demo
 ### Input Form
