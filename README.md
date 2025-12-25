@@ -127,5 +127,10 @@ Kurva Loss untuk ketiga model (contoh, sesuaikan plotmu):
 💻 **Live Demo:** [Streamlit App](https://requirementstxt-8appf5qte4lxyw5efbymerm.streamlit.app/)
 
 
+## 👤 Biodata Penulis
 
+Nama: Amanda Rachma Wijayanti
+NIM: 202210370311387
+Program Studi: Teknik Informatika
+Universitas: Universitas Muhammadiyah Malang
 
