@@ -97,22 +97,15 @@ Setelah klik **Predict**, sistem menampilkan:
 Confusion Matrix untuk ketiga model (contoh, sesuaikan dengan plot hasilmu):
 
 ![Confusion Matrix LSTM](conlstm.png)
-![Confusion Matrix Distilbert](conditilbert.png)
+![Confusion Matrix Distilbert](condistilbert.png)
 ![Confusion Matrix Bert](conbert.png)
 
-#### Loss Curve
+#### Loss & Accuracy Curve
 Kurva Loss untuk ketiga model (contoh, sesuaikan plotmu):
 
-![Loss Curve LSTM](losslstm.png)
-![Loss Curve Distilbert](lossdistilbert.png)
-![Loss Curve Bert](lossbert.png)
-
-#### Accuracy Curve
-Kurva Akurasi untuk ketiga model:
-
-![Accuracy Curve LSTM](acclstm.png)
-![Accuracy Curve Distilbert](accdistilbert.png)
-![Accuracy Curve Bert](sccbert.png)
+![LSTM](losslstm.png)
+![Distilbert](lossdistilbert.png)
+![Bert](lossbert.png)
 
 #### Classification Report Summary
 
