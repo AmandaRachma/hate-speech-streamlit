@@ -91,16 +91,36 @@ Setelah klik **Predict**, sistem menampilkan:
 - Progress bar yang menunjukkan probabilitas tiap kelas  
 
 ---
-### 3. Confusion Matrix, Loss & Accuracy Curve
+### Confusion Matrix, Loss & Accuracy
 
-**LSTM**
-![LSTM Loss & Accuracy](plots/lstm_loss_accuracy.png)
+#### Confusion Matrix
+Confusion Matrix untuk ketiga model (contoh, sesuaikan dengan plot hasilmu):
 
-**DistilBERT**
-![DistilBERT Loss & Accuracy](plots/distilbert_loss_accuracy.png)
+![Confusion Matrix LSTM](conlstm.png)
+![Confusion Matrix Distilbert](conditilbert.png)
+![Confusion Matrix Bert](conbert.png)
 
-**BERT**
-![BERT Loss & Accuracy](plots/bert_loss_accuracy.png)
+#### Loss Curve
+Kurva Loss untuk ketiga model (contoh, sesuaikan plotmu):
+
+![Loss Curve LSTM](losslstm.png)
+![Loss Curve Distilbert](lossdistilbert.png)
+![Loss Curve Bert](lossbert.png)
+
+#### Accuracy Curve
+Kurva Akurasi untuk ketiga model:
+
+![Accuracy Curve LSTM](acclstm.png)
+![Accuracy Curve Distilbert](accdistilbert.png)
+![Accuracy Curve Bert](sccbert.png)
+
+#### Classification Report Summary
+
+| Model       | Precision (macro avg) | Recall (macro avg) | F1-score (macro avg) | Accuracy |
+|------------ |-------------------- |------------------ |------------------- |--------- |
+| **LSTM**    | 0.64                | 0.63              | 0.64               | 0.86    |
+| **DistilBERT** | 0.78             | 0.70              | 0.72               | 0.91    |
+| **BERT**    | 0.78                | 0.72              | 0.74               | 0.91    |
 
 ---
 
